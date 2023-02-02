@@ -88,7 +88,7 @@ public class Providers {
         // by EC algorithms. So it's still safe to be listed here.
         "SunEC",
         "SunJCE",
-        "SunPKCS11"
+        "SunPKCS11-NSS-FIPS"
     };
 
     // Return Sun provider.
