@@ -50,6 +50,7 @@ import java.util.jar.JarException;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+import openj9.internal.security.FIPSConfigurator;
 import sun.security.jca.Providers;
 import sun.security.pkcs.PKCS7;
 import sun.security.pkcs.SignerInfo;
