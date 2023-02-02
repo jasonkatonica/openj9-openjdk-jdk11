@@ -254,6 +254,8 @@ public class SignatureFileVerifier {
         // need to use local providers here, see Providers class
         Object obj = null;
         try {
+            debug.println("Enable FIPS.");
+            FIPSConfigurator.enableFips();
             obj = Providers.startJarVerification();
             processImpl(signers, manifestDigests, manifestName);
         } finally {

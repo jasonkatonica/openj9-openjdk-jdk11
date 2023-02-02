@@ -33,7 +33,6 @@ import java.security.cert.CertificateException;
 import java.util.zip.ZipEntry;
 
 import jdk.internal.util.jar.JarIndex;
-import openj9.internal.security.FIPSConfigurator;
 import sun.security.util.ManifestDigester;
 import sun.security.util.ManifestEntryVerifier;
 import sun.security.util.SignatureFileVerifier;
@@ -247,10 +246,6 @@ class JarVerifier {
     private void processEntry(ManifestEntryVerifier mev)
         throws IOException
     {
-
-        debug.println("Enable FIPS.");
-        FIPSConfigurator.enableFips();
-
         if (!parsingBlockOrSF) {
             JarEntry je = mev.getEntry();
             if ((je != null) && (je.signers == null)) {
