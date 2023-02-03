@@ -254,14 +254,14 @@ public class SignatureFileVerifier {
         // calls Signature.getInstance() and MessageDigest.getInstance()
         // need to use local providers here, see Providers class
         Object obj = null;
-        try {
-            debug.println("Enable FIPS.");
-            FIPSConfigurator.enableFips();
-            obj = Providers.startJarVerification();
+        //try {
+            //debug.println("Enable FIPS.");
+            //FIPSConfigurator.enableFips();
+            //obj = Providers.startJarVerification();
             processImpl(signers, manifestDigests, manifestName);
-        } finally {
-            Providers.stopJarVerification(obj);
-        }
+        //} finally {
+        //    Providers.stopJarVerification(obj);
+        //}
 
     }
 
