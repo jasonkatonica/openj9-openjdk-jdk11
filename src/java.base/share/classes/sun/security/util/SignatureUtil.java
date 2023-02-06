@@ -147,6 +147,13 @@ public class SignatureUtil {
             AlgorithmParameterSpec params)
             throws ProviderException, InvalidAlgorithmParameterException,
             InvalidKeyException {
+        System.out.println("SignatureUtil.java.initVerifyWithParam");
+        if (key instanceof sun.security.x509.X509Key) {
+            System.out.println("SigtureUtil.java.initVerifyWithParam X509Key");
+        }
+
+        }
+
         SharedSecrets.getJavaSecuritySignatureAccess().initVerify(s, key, params);
     }
 
