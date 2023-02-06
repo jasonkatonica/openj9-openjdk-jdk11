@@ -49,7 +49,12 @@ final class P11DSAKeyFactory extends P11KeyFactory {
 
     PublicKey implTranslatePublicKey(PublicKey key) throws InvalidKeyException {
         try {
-            if (key instanceof DSAPublicKey) {
+            if ("X.509".equals(key.getFormat())) {
+                // let Sun provider parse for us, then recurse
+                byte[] encoded = key.getEncoded();
+                key = new sun.security.provider.DSAPublicKey(encoded);
+                return implTranslatePublicKey(key);
+            else if (key instanceof DSAPublicKey) {
                 DSAPublicKey dsaKey = (DSAPublicKey)key;
                 DSAParams params = dsaKey.getParams();
                 return generatePublic(
@@ -58,11 +63,6 @@ final class P11DSAKeyFactory extends P11KeyFactory {
                     params.getQ(),
                     params.getG()
                 );
-            } else if ("X.509".equals(key.getFormat())) {
-                // let Sun provider parse for us, then recurse
-                byte[] encoded = key.getEncoded();
-                key = new sun.security.provider.DSAPublicKey(encoded);
-                return implTranslatePublicKey(key);
             } else {
                 throw new InvalidKeyException("PublicKey must be instance "
                         + "of DSAPublicKey or have X.509 encoding");
