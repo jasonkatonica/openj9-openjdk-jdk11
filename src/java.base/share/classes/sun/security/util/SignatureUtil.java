@@ -37,6 +37,7 @@ import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import sun.security.x509.X509Key;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.RSAPublicKeySpec;
 /**
  * Utility class for Signature related operations. Currently used by various
  * internal PKI classes such as sun.security.x509.X509CertImpl,
@@ -189,7 +190,7 @@ public class SignatureUtil {
 
     public static RSAPublicKey convertX509Key(X509Key x509Key) throws Exception {
         KeyFactory kf = KeyFactory.getInstance("RSA");
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(x509Key.getEncoded());
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(x509Key.getKey());
         PublicKey publicKey = kf.generatePublic(keySpec);
         return (RSAPublicKey) publicKey;
       }
