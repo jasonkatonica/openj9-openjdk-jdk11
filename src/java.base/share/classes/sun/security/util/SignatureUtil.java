@@ -32,6 +32,11 @@ import java.util.Locale;
 import sun.security.rsa.RSAUtil;
 import jdk.internal.misc.SharedSecrets;
 
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
+import sun.security.x509.X509Key;
+import java.security.interfaces.RSAPublicKey;
 /**
  * Utility class for Signature related operations. Currently used by various
  * internal PKI classes such as sun.security.x509.X509CertImpl,
@@ -150,9 +155,11 @@ public class SignatureUtil {
         System.out.println("SignatureUtil.java.initVerifyWithParam");
         if (key instanceof sun.security.x509.X509Key) {
             System.out.println("SigtureUtil.java.initVerifyWithParam X509Key");
+            RSAPublicKey convertedKey = convertX509Key(key);
+            SharedSecrets.getJavaSecuritySignatureAccess().initVerify(s, convertedKey, params);
+        } else {
+            SharedSecrets.getJavaSecuritySignatureAccess().initVerify(s, key, params);
         }
-
-        SharedSecrets.getJavaSecuritySignatureAccess().initVerify(s, key, params);
     }
 
     // Utility method for initializing the specified Signature object
@@ -173,4 +180,11 @@ public class SignatureUtil {
             InvalidKeyException {
         SharedSecrets.getJavaSecuritySignatureAccess().initSign(s, key, params, sr);
     }
+
+    public static RSAPublicKey convertX509Key(X509Key x509Key) throws Exception {
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(x509Key.getEncoded());
+        PublicKey publicKey = kf.generatePublic(keySpec);
+        return (RSAPublicKey) publicKey;
+      }
 }
