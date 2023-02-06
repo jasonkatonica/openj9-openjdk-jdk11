@@ -194,8 +194,6 @@ public class SignatureUtil {
         System.out.println("Algorithm: " + x509Key.getAlgorithm());
         System.out.println("Encoded:");
         printBytes(x509Key.getEncoded());
-        System.out.println("Key:");
-        printBytes(x509Key.getKey());
         //return (DSAPublicKey)kf.translateKey((Key)x509Key);
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(x509Key.getEncoded());
 
