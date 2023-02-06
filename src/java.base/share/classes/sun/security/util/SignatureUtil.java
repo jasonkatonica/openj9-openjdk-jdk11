@@ -152,8 +152,6 @@ public class SignatureUtil {
             System.out.println("SigtureUtil.java.initVerifyWithParam X509Key");
         }
 
-        }
-
         SharedSecrets.getJavaSecuritySignatureAccess().initVerify(s, key, params);
     }
 
