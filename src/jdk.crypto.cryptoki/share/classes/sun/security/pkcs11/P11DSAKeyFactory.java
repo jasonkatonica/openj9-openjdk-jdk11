@@ -54,7 +54,7 @@ final class P11DSAKeyFactory extends P11KeyFactory {
                 byte[] encoded = key.getEncoded();
                 key = new sun.security.provider.DSAPublicKey(encoded);
                 return implTranslatePublicKey(key);
-            else if (key instanceof DSAPublicKey) {
+            } else if (key instanceof DSAPublicKey) {
                 DSAPublicKey dsaKey = (DSAPublicKey)key;
                 DSAParams params = dsaKey.getParams();
                 return generatePublic(
