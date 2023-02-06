@@ -39,6 +39,7 @@ import sun.security.x509.X509Key;
 import java.security.interfaces.RSAPublicKey;
 import java.security.interfaces.DSAPublicKey;
 import java.security.spec.RSAPublicKeySpec;
+import java.util.Base64.Decoder;
 /**
  * Utility class for Signature related operations. Currently used by various
  * internal PKI classes such as sun.security.x509.X509CertImpl,
@@ -193,9 +194,11 @@ public class SignatureUtil {
         KeyFactory kf = KeyFactory.getInstance("DSA");
         System.out.println("Algorithm: " + x509Key.getAlgorithm());
         System.out.println("Encoded:");
-        printBytes(x509Key.getEncoded());
+        byte[] encodedKey = x509Key.getEncoded();
+        printBytes(encodedKey);
         //return (DSAPublicKey)kf.translateKey((Key)x509Key);
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(x509Key.getEncoded());
+
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encodedKey);
 
         PublicKey publicKey = kf.generatePublic(keySpec);
         return (DSAPublicKey) publicKey;
