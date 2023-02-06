@@ -192,9 +192,10 @@ public class SignatureUtil {
     public static DSAPublicKey convertX509Key(X509Key x509Key) throws Exception {
         KeyFactory kf = KeyFactory.getInstance("DSA");
         System.out.println("Algorithm: " + x509Key.getAlgorithm());
-        return (DSAPublicKey)kf.translateKey((Key)x509Key);
-        //X509EncodedKeySpec keySpec = new X509EncodedKeySpec(x509Key.getKey());
-        //PublicKey publicKey = kf.generatePublic(keySpec);
-        //return (RSAPublicKey) publicKey;
+        //return (DSAPublicKey)kf.translateKey((Key)x509Key);
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(x509Key.getEncoded());
+
+        PublicKey publicKey = kf.generatePublic(keySpec);
+        return (DSAPublicKey) publicKey;
     }
 }
