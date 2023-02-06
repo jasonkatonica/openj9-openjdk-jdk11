@@ -155,7 +155,13 @@ public class SignatureUtil {
         System.out.println("SignatureUtil.java.initVerifyWithParam");
         if (key instanceof sun.security.x509.X509Key) {
             System.out.println("SigtureUtil.java.initVerifyWithParam X509Key");
-            RSAPublicKey convertedKey = convertX509Key(key);
+            RSAPublicKey convertedKey = null;
+            try {
+                convertedKey = convertX509Key((X509Key)key);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             SharedSecrets.getJavaSecuritySignatureAccess().initVerify(s, convertedKey, params);
         } else {
             SharedSecrets.getJavaSecuritySignatureAccess().initVerify(s, key, params);
