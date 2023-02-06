@@ -190,6 +190,7 @@ public class SignatureUtil {
 
     public static RSAPublicKey convertX509Key(X509Key x509Key) throws Exception {
         KeyFactory kf = KeyFactory.getInstance("EC");
+        System.out.println("Algorithm: " + x509Key.getAlgorithm());
         return (RSAPublicKey)kf.translateKey((Key)x509Key);
                 //X509EncodedKeySpec keySpec = new X509EncodedKeySpec(x509Key.getKey());
         //PublicKey publicKey = kf.generatePublic(keySpec);
