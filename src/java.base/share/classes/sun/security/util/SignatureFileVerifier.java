@@ -282,6 +282,8 @@ public class SignatureFileVerifier {
             return;
         }
 
+        System.out.println("Bytes sent to block.verify:");
+        printBytes(sfBytes);
         SignerInfo[] infos = block.verify(sfBytes);
 
         if (infos == null) {
@@ -840,5 +842,16 @@ public class SignatureFileVerifier {
         }
         signerCache.add(cachedSigners);
         signers.put(name, cachedSigners);
+    }
+
+    private static void printBytes(byte[] bytes) {
+        System.out.println("Hex: ");
+        for ( byte b: bytes) {
+            System.out.print(String.format("%02X ",b));
+        }
+        System.out.println("");
+
+        System.out.println("String: " + new String(bytes));
+
     }
 }
