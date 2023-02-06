@@ -328,6 +328,7 @@ class JarVerifier {
 
             } catch (IOException | CertificateException |
                     NoSuchAlgorithmException | SignatureException e) {
+                e.printSTackTrace();
                 if (debug != null) debug.println("processEntry caught: "+e);
                 // ignore and treat as unsigned
             }
