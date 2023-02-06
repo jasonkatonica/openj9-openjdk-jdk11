@@ -37,6 +37,7 @@ import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import sun.security.x509.X509Key;
 import java.security.interfaces.RSAPublicKey;
+import java.security.interfaces.DSAPublicKey;
 import java.security.spec.RSAPublicKeySpec;
 /**
  * Utility class for Signature related operations. Currently used by various
@@ -156,7 +157,7 @@ public class SignatureUtil {
         System.out.println("SignatureUtil.java.initVerifyWithParam");
         if (key instanceof sun.security.x509.X509Key) {
             System.out.println("SigtureUtil.java.initVerifyWithParam X509Key");
-            RSAPublicKey convertedKey = null;
+            DSAPublicKey convertedKey = null;
             try {
                 convertedKey = convertX509Key((X509Key)key);
             } catch (Exception e) {
@@ -188,12 +189,12 @@ public class SignatureUtil {
         SharedSecrets.getJavaSecuritySignatureAccess().initSign(s, key, params, sr);
     }
 
-    public static RSAPublicKey convertX509Key(X509Key x509Key) throws Exception {
-        KeyFactory kf = KeyFactory.getInstance("EC");
+    public static DSAPublicKey convertX509Key(X509Key x509Key) throws Exception {
+        KeyFactory kf = KeyFactory.getInstance("DSA");
         System.out.println("Algorithm: " + x509Key.getAlgorithm());
-        return (RSAPublicKey)kf.translateKey((Key)x509Key);
-                //X509EncodedKeySpec keySpec = new X509EncodedKeySpec(x509Key.getKey());
+        return (DSAPublicKey)kf.translateKey((Key)x509Key);
+        //X509EncodedKeySpec keySpec = new X509EncodedKeySpec(x509Key.getKey());
         //PublicKey publicKey = kf.generatePublic(keySpec);
         //return (RSAPublicKey) publicKey;
-      }
+    }
 }
