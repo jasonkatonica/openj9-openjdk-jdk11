@@ -202,7 +202,7 @@ public class SignatureUtil {
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encodedKey);
         DSAPublicKey newKey = new sun.security.provider.DSAPublicKey(encodedKey);
 
-        DSAPublicKey anotherPublicKey = new sun.security.provider.DSAPublicKey(newKey.getY(),BigInteger.valueOf(0), BigInteger.valueOf(0), BigInteger.valueOf(0));
+        DSAPublicKey anotherPublicKey = new sun.security.provider.DSAPublicKey(newKey.getY(),newKey.getY(), newKey.getY(), newKey.getY());
         return anotherPublicKey;
     }
 
