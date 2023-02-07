@@ -199,10 +199,10 @@ public class SignatureUtil {
         //return (DSAPublicKey)kf.translateKey((Key)x509Key);
 
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encodedKey);
-        return new sun.security.provider.DSAPublicKey(encodedKey);
+        DSAPublicKey newKey = new sun.security.provider.DSAPublicKey(encodedKey);
 
-        //PublicKey publicKey = kf.generatePublic(keySpec);
-        //return (DSAPublicKey) publicKey;
+        PublicKey publicKey = (PublicKey) kf.translateKey(newKey);
+        return (DSAPublicKey) publicKey;
     }
 
     private static void printBytes(byte[] bytes) {
