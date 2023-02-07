@@ -159,6 +159,14 @@ public class SignatureUtil {
         System.out.println("SignatureUtil.java.initVerifyWithParam");
         if (key instanceof sun.security.x509.X509Key) {
             DSAParameterSpec myDSAParams = (DSAParameterSpec)params;
+
+            if (myDSAParams == null) {
+                System.out.println("myDSAParams are null");
+            }
+            if (params == null) {
+                System.out.println("params are null");
+            }
+
             if (myDSAParams instanceof DSAParameterSpec) {
                 System.out.println("Parameters are of type DSAParameterSpec");
                 myDSAParams.getP();
