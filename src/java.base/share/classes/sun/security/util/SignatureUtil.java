@@ -161,7 +161,7 @@ public class SignatureUtil {
             System.out.println("SigtureUtil.java.initVerifyWithParam X509Key");
             DSAPublicKey convertedKey = null;
             try {
-                convertedKey = convertX509Key((X509Key)key);
+                convertedKey = convertX509Key((X509Key)key, params);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -191,19 +191,24 @@ public class SignatureUtil {
         SharedSecrets.getJavaSecuritySignatureAccess().initSign(s, key, params, sr);
     }
 
-    public static DSAPublicKey convertX509Key(X509Key x509Key) throws Exception {
+    public static DSAPublicKey convertX509Key(X509Key x509Key, AlgorithmParameterSpec params) throws Exception {
         KeyFactory kf = KeyFactory.getInstance("DSA");
         System.out.println("Algorithm: " + x509Key.getAlgorithm());
-        System.out.println("Encoded:");
-        byte[] encodedKey = x509Key.getEncoded();
-        printBytes(encodedKey);
-        //return (DSAPublicKey)kf.translateKey((Key)x509Key);
+        KeyPairGenerator kpg - KeyPairGenerator.getInstance("DSA");
+        kpg.initialize(params);
+        KeyPair keyPair = kpg.generateKeyPair();
+        return (DSAPublicKey)keyPair.getPublic();
+        
+        //System.out.println("Encoded:");
+        //byte[] encodedKey = x509Key.getEncoded();
+        //printBytes(encodedKey);
+        //(DSAPublicKey)kf.generatePublic(encodedKey);
 
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encodedKey);
-        DSAPublicKey newKey = new sun.security.provider.DSAPublicKey(encodedKey);
+        //X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encodedKey);
+        //DSAPublicKey newKey = new sun.security.provider.DSAPublicKey(encodedKey);
 
-        DSAPublicKey anotherPublicKey = new sun.security.provider.DSAPublicKey(newKey.getY(),newKey.getY(), newKey.getY(), newKey.getY());
-        return anotherPublicKey;
+        //DSAPublicKey anotherPublicKey = new sun.security.provider.DSAPublicKey(newKey.getY(),newKey.getY(), newKey.getY(), newKey.getY());
+        //return anotherPublicKey;
     }
 
     private static void printBytes(byte[] bytes) {
