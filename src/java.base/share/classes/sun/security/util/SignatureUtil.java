@@ -158,6 +158,12 @@ public class SignatureUtil {
             InvalidKeyException {
         System.out.println("SignatureUtil.java.initVerifyWithParam");
         if (key instanceof sun.security.x509.X509Key) {
+            if (params instanceof DSAParameterSpec) {
+                System.out.println("Parameters are of type DSAParameterSpec");
+            } else {
+                System.out.println("Parameters are NOT of type DSAParameterSpec: " + params.toString());
+            }
+
             System.out.println("SigtureUtil.java.initVerifyWithParam X509Key");
             DSAPublicKey convertedKey = null;
             try {
