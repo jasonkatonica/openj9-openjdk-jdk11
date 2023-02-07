@@ -194,7 +194,7 @@ public class SignatureUtil {
     public static DSAPublicKey convertX509Key(X509Key x509Key, AlgorithmParameterSpec params) throws Exception {
         KeyFactory kf = KeyFactory.getInstance("DSA");
         System.out.println("Algorithm: " + x509Key.getAlgorithm());
-        KeyPairGenerator kpg - KeyPairGenerator.getInstance("DSA");
+        KeyPairGenerator kpg = KeyPairGenerator.getInstance("DSA");
         kpg.initialize(params);
         KeyPair keyPair = kpg.generateKeyPair();
         return (DSAPublicKey)keyPair.getPublic();
