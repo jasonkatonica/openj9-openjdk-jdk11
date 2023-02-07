@@ -158,8 +158,12 @@ public class SignatureUtil {
             InvalidKeyException {
         System.out.println("SignatureUtil.java.initVerifyWithParam");
         if (key instanceof sun.security.x509.X509Key) {
-            if (params instanceof DSAParameterSpec) {
+            DSAParameterSpec myDSAParams = (DSAParameterSpec)params;
+            if (myDSAParams instanceof DSAParameterSpec) {
                 System.out.println("Parameters are of type DSAParameterSpec");
+                myDSAParams.getP();
+                myDSAParams.getQ();
+                myDSAParams.getG();
             } else {
                 System.out.println("Parameters are NOT of type DSAParameterSpec: " + params.toString());
             }
@@ -167,12 +171,12 @@ public class SignatureUtil {
             System.out.println("SigtureUtil.java.initVerifyWithParam X509Key");
             DSAPublicKey convertedKey = null;
             try {
-                convertedKey = convertX509Key((X509Key)key, (DSAParameterSpec)params);
+                convertedKey = convertX509Key((X509Key)key, myDSAParams);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            SharedSecrets.getJavaSecuritySignatureAccess().initVerify(s, convertedKey, params);
+            SharedSecrets.getJavaSecuritySignatureAccess().initVerify(s, convertedKey, myDSAParams);
         } else {
             SharedSecrets.getJavaSecuritySignatureAccess().initVerify(s, key, params);
         }
