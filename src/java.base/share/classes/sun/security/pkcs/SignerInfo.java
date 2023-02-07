@@ -445,6 +445,11 @@ public class SignerInfo implements DerEncoder {
 
             AlgorithmParameters ap =
                 digestEncryptionAlgorithmId.getParameters();
+
+            if (ap == null) {
+                System.out.println("ap is null");
+            }
+
             try {
                 SignatureUtil.initVerifyWithParam(sig, key,
                     SignatureUtil.getParamSpec(sigAlgName, ap));

@@ -146,6 +146,9 @@ public class SignatureUtil {
                      ("Unrecognized algorithm for signature parameters " +
                       sigName);
             }
+        } else {
+            throw new ProviderException
+                     ("Algorithm parameters bytes is null.");
         }
         return paramSpec;
     }
