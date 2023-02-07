@@ -161,7 +161,7 @@ public class SignatureUtil {
             System.out.println("SigtureUtil.java.initVerifyWithParam X509Key");
             DSAPublicKey convertedKey = null;
             try {
-                convertedKey = convertX509Key((X509Key)key, params);
+                convertedKey = convertX509Key((X509Key)key, (DSAParameterSpec)params);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -191,11 +191,11 @@ public class SignatureUtil {
         SharedSecrets.getJavaSecuritySignatureAccess().initSign(s, key, params, sr);
     }
 
-    public static DSAPublicKey convertX509Key(X509Key x509Key, AlgorithmParameterSpec params) throws Exception {
+    public static DSAPublicKey convertX509Key(X509Key x509Key, DSAParameterSpec params) throws Exception {
         //KeyFactory kf = KeyFactory.getInstance("DSA");
         System.out.println("Algorithm: " + x509Key.getAlgorithm());
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("DSA");
-        kpg.initialize((DSAParameterSpec)params);
+        kpg.initialize(params);
         KeyPair keyPair = kpg.generateKeyPair();
         return (DSAPublicKey)keyPair.getPublic();
         
