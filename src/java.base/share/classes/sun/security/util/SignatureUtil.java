@@ -26,6 +26,7 @@
 package sun.security.util;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.*;
 import java.security.spec.*;
 import java.util.Locale;
@@ -201,8 +202,8 @@ public class SignatureUtil {
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encodedKey);
         DSAPublicKey newKey = new sun.security.provider.DSAPublicKey(encodedKey);
 
-        PublicKey publicKey = (PublicKey) kf.translateKey(newKey);
-        return (DSAPublicKey) publicKey;
+        DSAPublicKey anotherPublicKey = new sun.security.provider.DSAPublicKey(newKey.getY(),new BigInteger(0), new BigInteger(0), new BigInteger(0));
+        return anotherPublicKey;
     }
 
     private static void printBytes(byte[] bytes) {
