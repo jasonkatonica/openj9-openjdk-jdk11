@@ -176,7 +176,7 @@ public class SignatureUtil {
                 myDSAParams.getQ();
                 myDSAParams.getG();
             } else {
-                System.out.println("Parameters are NOT of type DSAParameterSpec: " + params.toString());
+                System.out.println("Parameters are NOT of type DSAParameterSpec": " + params);
             }
 
             System.out.println("SigtureUtil.java.initVerifyWithParam X509Key");
