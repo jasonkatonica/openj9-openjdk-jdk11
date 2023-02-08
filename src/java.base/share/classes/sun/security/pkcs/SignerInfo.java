@@ -448,6 +448,7 @@ public class SignerInfo implements DerEncoder {
 
             if (ap == null) {
                 System.out.println("ap is null");
+                this.toString();
             }
 
             try {
