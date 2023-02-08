@@ -217,7 +217,7 @@ public class SignatureUtil {
         System.out.println("Algorithm: " + x509Key.getAlgorithm());
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("DSA");
         //kpg.initialize(params);
-        kpg.initialize();//DONT DO THIS IT GENERATES A RANDOM VALUE!!! Just checking how far we get signature should fail!
+        kpg.initialize(1024);//DONT DO THIS IT GENERATES A RANDOM VALUE!!! Just checking how far we get signature should fail!
         KeyPair keyPair = kpg.generateKeyPair();
         return (DSAPublicKey)keyPair.getPublic();
         
