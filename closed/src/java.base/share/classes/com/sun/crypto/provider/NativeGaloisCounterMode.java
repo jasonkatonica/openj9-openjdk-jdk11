@@ -356,6 +356,25 @@ final class NativeGaloisCounterMode extends FeedbackCipher {
 
             byte[] aad = (((aadBuffer == null) || (aadBuffer.size() == 0)) ? emptyAAD : aadBuffer.toByteArray());
 
+            System.out.println("-----------------------Performing Crypto--------------------------");
+            System.out.println("key: ");
+            printBytes(key);
+            System.out.println("key.length: " + key.length);
+            System.out.println("iv: ");
+            printBytes(iv);
+            System.out.println("iv.length: " + iv.length);
+            System.out.println("in: ");
+            printBytes(in);
+            System.out.println("inOfs: " + inOfs);
+            System.out.println("len: " + len);
+            System.out.println("out: ");
+            printBytes(out);
+            System.out.println("outOfs: " + outOfs);
+            System.out.println("aad: ");
+            printBytes(aad);
+            System.out.println("aad.length: " + aad.length);
+            System.out.println("localTagLenBytes: " + localTagLenBytes);
+            System.out.println("------------------------------------------------------------------")
             ret = nativeCrypto.GCMEncrypt(key, key.length,
                     iv, iv.length,
                     in, inOfs, len,
@@ -367,6 +386,16 @@ final class NativeGaloisCounterMode extends FeedbackCipher {
         }
 
         return (len + localTagLenBytes);
+    }
+
+    private void printBytes(byte[] bytes) {
+        System.out.println("Hex: ");
+        for ( byte b: bytes) {
+            System.out.print(String.format("%02X ",b));
+        }
+        System.out.println("");
+
+        //System.out.println("String: " + new String(bytes));
     }
 
     /**
