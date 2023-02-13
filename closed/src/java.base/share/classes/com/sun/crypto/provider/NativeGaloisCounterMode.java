@@ -375,6 +375,7 @@ final class NativeGaloisCounterMode extends FeedbackCipher {
             System.out.println("aad.length: " + aad.length);
             System.out.println("localTagLenBytes: " + localTagLenBytes);
             System.out.println("------------------------------------------------------------------");
+            System.out.flush();
             ret = nativeCrypto.GCMEncrypt(key, key.length,
                     iv, iv.length,
                     in, inOfs, len,
