@@ -357,6 +357,7 @@ final class NativeGaloisCounterMode extends FeedbackCipher {
             byte[] aad = (((aadBuffer == null) || (aadBuffer.size() == 0)) ? emptyAAD : aadBuffer.toByteArray());
 
             System.out.println("-----------------------Performing Crypto--------------------------");
+            System.out.println("Open SSL Version: " + nativeCrypto.getVersion());
             System.out.println("key: ");
             printBytes(key);
             System.out.println("key.length: " + key.length);
