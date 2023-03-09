@@ -72,6 +72,8 @@ public final class Security {
     /*[IF CRIU_SUPPORT]*/
     private static final boolean criuDebug = Boolean.parseBoolean(
 		System.getProperty("enable.j9internal.checkpoint.security.api.debug", "false"));
+    private static final boolean speculativeAlgorithms = Boolean.parseBoolean(
+		System.getProperty("criu.speculative.security.getalgorithms", "false"));        
     /*[ENDIF] CRIU_SUPPORT*/
 
     /* The java.security properties */
@@ -395,11 +397,6 @@ public final class Security {
      */
     public static synchronized int insertProviderAt(Provider provider,
             int position) {
-        
-        /*[IF CRIU_SUPPORT]*/
-        CRIUConfigurator.invalidateAlgorithmCache();
-        /*[ENDIF] CRIU_SUPPORT*/
-        
         String providerName = provider.getName();
         checkInsertProvider(providerName);
         ProviderList list = Providers.getFullProviderList();
@@ -408,6 +405,16 @@ public final class Security {
             return -1;
         }
         Providers.setProviderList(newList);
+        if (InternalCRIUSupport.isCheckpointAllowed() && CRIUConfigurator.isCachedAlgorithmsPresentAndReady()) {
+            if (criuDebug) {
+                System.out.println("Attempt to append to CRIU cache for getAlgorithms() within insertProviderAt()");
+            }
+            CRIUConfigurator.appendAlgorithms();
+        } else {
+            if (criuDebug) {
+                System.out.println("Do not attempt to append to CRIU cache for getAlgorithms() within insertProviderAt()");
+            }
+        }
         return newList.getIndex(providerName) + 1;
     }
 
@@ -481,14 +488,20 @@ public final class Security {
      * @see #addProvider
      */
     public static synchronized void removeProvider(String name) {
-        /*[IF CRIU_SUPPORT]*/
-        CRIUConfigurator.invalidateAlgorithmCache();
-        /*[ENDIF] CRIU_SUPPORT*/
-
         check("removeProvider." + name);
         ProviderList list = Providers.getFullProviderList();
         ProviderList newList = ProviderList.remove(list, name);
         Providers.setProviderList(newList);
+        if (InternalCRIUSupport.isCheckpointAllowed() && CRIUConfigurator.isCachedAlgorithmsPresentAndReady()) {
+            if (criuDebug) {
+                System.out.println("Attempt to append to CRIU cache for getAlgorithms() within removeProvider()");
+            }
+            CRIUConfigurator.appendAlgorithms();
+        } else {
+            if (criuDebug) {
+                System.out.println("Do not attempt to append to CRIU cache for getAlgorithms() within removeProvider()");
+            }
+        }
     }
 
     /**
@@ -1116,7 +1129,7 @@ public final class Security {
 
         /*[IF CRIU_SUPPORT]*/
         // Check if the CRIU algorithm cache is ready/valid and contains data. If true use that cached data.
-        if (CRIUConfigurator.isCachedAlgorithmsPresentAndReady()) {
+        if (InternalCRIUSupport.isCheckpointAllowed() && CRIUConfigurator.isCachedAlgorithmsPresentAndReady()) {
             if (criuDebug) {
                 System.out.println("Use CRIU cache for getAlgorithms()");
             }
@@ -1130,6 +1143,10 @@ public final class Security {
 
         if ((serviceName == null) || (serviceName.isEmpty()) ||
             (serviceName.endsWith("."))) {
+            if (criuDebug) {
+                System.out.println("Return computed empty set algorithms for service <" + serviceName + ">:");
+                System.out.println(Collections.emptySet());
+            }
             return Collections.emptySet();
         }
 
@@ -1157,6 +1174,11 @@ public final class Security {
                 }
             }
         }
-        return Collections.unmodifiableSet(result);
+        Set <String> returnValue = Collections.unmodifiableSet(result);
+        if (criuDebug) {
+            System.out.println("Return computed algorithms for service <" + serviceName + ">:");
+            System.out.println(returnValue);
+        }
+        return returnValue;
     }
 }
