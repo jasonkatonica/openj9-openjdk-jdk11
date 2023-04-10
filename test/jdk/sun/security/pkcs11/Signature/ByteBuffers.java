@@ -70,7 +70,7 @@ public class ByteBuffers extends PKCS11Test {
         random.nextBytes(t);
 
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA", p);
-        kpg.initialize(512);
+        kpg.initialize(2048);
         KeyPair kp = kpg.generateKeyPair();
 
         Signature sig = Signature.getInstance("MD5withRSA", p);

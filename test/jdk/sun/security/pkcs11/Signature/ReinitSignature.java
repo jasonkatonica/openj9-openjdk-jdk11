@@ -363,7 +363,7 @@ public class ReinitSignature extends PKCS11Test {
         }
 
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA", p);
-        kpg.initialize(512);
+        kpg.initialize(2048);
         KeyPair kp = kpg.generateKeyPair();
         PrivateKey privateKey = kp.getPrivate();
         PublicKey publicKey = kp.getPublic();

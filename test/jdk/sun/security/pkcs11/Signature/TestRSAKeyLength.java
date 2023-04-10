@@ -65,11 +65,11 @@ public class TestRSAKeyLength extends PKCS11Test {
             return;
         }
 
-        boolean isValidKeyLength[] = { true, true, true, false, false };
+        boolean isValidKeyLength[] = { true, true, true, true };
         String algos[] = { "SHA1withRSA", "SHA224withRSA", "SHA256withRSA",
-                           "SHA384withRSA", "SHA512withRSA" };
+                           "SHA384withRSA"};
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA", p);
-        kpg.initialize(512);
+        kpg.initialize(2048);
         KeyPair kp = kpg.generateKeyPair();
         PrivateKey privKey = kp.getPrivate();
         PublicKey pubKey = kp.getPublic();
