@@ -1021,6 +1021,13 @@ JNIEXPORT jint JNICALL Java_jdk_crypto_jniprovider_NativeCrypto_CBCInit
     unsigned char* ivNative = NULL;
     unsigned char* keyNative = NULL;
     const EVP_CIPHER * evp_cipher1 = NULL;
+    jboolean isCopy = JNI_FALSE;
+
+    clock_t start_time, end_time;
+    double total_time = 0.0;
+    double time_taken = 0.0;
+
+    start_time = clock();
 
     if (NULL == ctx) {
         return -1;
@@ -1040,28 +1047,46 @@ JNIEXPORT jint JNICALL Java_jdk_crypto_jniprovider_NativeCrypto_CBCInit
             break;
     }
 
-    ivNative = (unsigned char*)((*env)->GetByteArrayElements(env, iv, 0));
+    ivNative = (unsigned char*)((*env)->GetPrimitiveArrayCritical(env, iv, &isCopy));
     if (NULL == ivNative) {
         return -1;
     }
+    //if (isCopy == JNI_TRUE) {
+    //    printf("A copy was made in spot 1\n");
+    //} else {
+    //    printf("No copy made in spot 1\n");
+    //}
+    //fflush( stdout );
 
-    keyNative = (unsigned char*)((*env)->GetByteArrayElements(env, key, 0));
+    keyNative = (unsigned char*)((*env)->GetPrimitiveArrayCritical(env, key, &isCopy));
     if (NULL == keyNative) {
-        (*env)->ReleaseByteArrayElements(env, iv, (jbyte*)ivNative, JNI_ABORT);
+        (*env)->ReleasePrimitiveArrayCritical(env, iv, (jbyte*)ivNative, JNI_ABORT);
         return -1;
     }
+    //if (isCopy == JNI_TRUE) {
+    //    printf("A copy was made in spot 2\n");
+    //} else {
+    //    printf("No copy made in spot 2\n");
+    //}
+    //fflush( stdout );
 
     if (1 != (*OSSL_CipherInit_ex)(ctx, evp_cipher1, NULL, keyNative, ivNative, mode)) {
         printErrors();
-        (*env)->ReleaseByteArrayElements(env, iv, (jbyte*)ivNative, JNI_ABORT);
-        (*env)->ReleaseByteArrayElements(env, key, (jbyte*)keyNative, JNI_ABORT);
+        (*env)->ReleasePrimitiveArrayCritical(env, iv, (jbyte*)ivNative, JNI_ABORT);
+        (*env)->ReleasePrimitiveArrayCritical(env, key, (jbyte*)keyNative, JNI_ABORT);
         return -1;
     }
-
+    
     (*OSSL_CIPHER_CTX_set_padding)(ctx, 0);
 
-    (*env)->ReleaseByteArrayElements(env, iv, (jbyte*)ivNative, JNI_ABORT);
-    (*env)->ReleaseByteArrayElements(env, key, (jbyte*)keyNative, JNI_ABORT);
+    (*env)->ReleasePrimitiveArrayCritical(env, iv, (jbyte*)ivNative, JNI_ABORT);
+    (*env)->ReleasePrimitiveArrayCritical(env, key, (jbyte*)keyNative, JNI_ABORT);
+    
+    end_time = clock();
+    time_taken = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    total_time += time_taken;
+    printf("Java_jdk_crypto_jniprovider_NativeCrypto_CBCInit, Time taken: %.4f seconds\n", time_taken);
+
     return 0;
 }
 
@@ -1081,22 +1106,35 @@ JNIEXPORT jint JNICALL Java_jdk_crypto_jniprovider_NativeCrypto_CBCUpdate
 
     unsigned char* inputNative;
     unsigned char* outputNative;
+    jboolean isCopy = JNI_FALSE;
 
     if (NULL == ctx) {
         return -1;
     }
 
-    inputNative = (unsigned char*)((*env)->GetPrimitiveArrayCritical(env, input, 0));
+    inputNative = (unsigned char*)((*env)->GetPrimitiveArrayCritical(env, input, &isCopy));
     if (NULL == inputNative) {
         return -1;
     }
+    //if (isCopy == JNI_TRUE) {
+    //    printf("A copy was made in spot 3\n");
+    //} else {
+    //    printf("No copy made in spot 3\n");
+    //}
+    //fflush( stdout );
 
-    outputNative = (unsigned char*)((*env)->GetPrimitiveArrayCritical(env, output, 0));
+    outputNative = (unsigned char*)((*env)->GetPrimitiveArrayCritical(env, output, &isCopy));
     if (NULL == outputNative) {
         (*env)->ReleasePrimitiveArrayCritical(env, input, inputNative, JNI_ABORT);
         return -1;
     }
-
+    //if (isCopy == JNI_TRUE) {
+    //    printf("A copy was made in spot 4\n");
+    //} else {
+    //    printf("No copy made in spot 4\n");
+    //}
+    //fflush( stdout );
+    
     if (1 != (*OSSL_CipherUpdate)(ctx, (outputNative + outputOffset), &outputLen, (inputNative + inputOffset), inputLen)) {
         printErrors();
         (*env)->ReleasePrimitiveArrayCritical(env, input, inputNative, JNI_ABORT);
@@ -1120,7 +1158,14 @@ JNIEXPORT jint JNICALL Java_jdk_crypto_jniprovider_NativeCrypto_CBCFinalEncrypt
   (JNIEnv *env, jclass thisObj, jlong c, jbyteArray input, jint inputOffset, jint inputLen,
   jbyteArray output, jint outputOffset) {
 
+    clock_t start_time, end_time;
+    double total_time = 0.0;
+    double time_taken = 0.0;
+
+    start_time = clock();
+
     EVP_CIPHER_CTX *ctx = (EVP_CIPHER_CTX*)(intptr_t) c;
+    jboolean isCopy = JNI_FALSE;
 
     if (NULL == ctx) {
         return -1;
@@ -1134,16 +1179,29 @@ JNIEXPORT jint JNICALL Java_jdk_crypto_jniprovider_NativeCrypto_CBCFinalEncrypt
     unsigned char* inputNative;
     unsigned char* outputNative;
 
-    inputNative = (unsigned char*)((*env)->GetPrimitiveArrayCritical(env, input, 0));
+    inputNative = (unsigned char*)((*env)->GetPrimitiveArrayCritical(env, input, &isCopy));
     if (NULL == inputNative) {
         return -1;
     }
+    //if (isCopy == JNI_TRUE) {
+    //    printf("A copy was made in spot 5\n");
+    //} else {
+    //    printf("No copy made in spot 5\n");
+    //}
+    //fflush( stdout );
 
-    outputNative = (unsigned char*)((*env)->GetPrimitiveArrayCritical(env, output, 0));
+    outputNative = (unsigned char*)((*env)->GetPrimitiveArrayCritical(env, output, &isCopy));
     if (NULL == outputNative) {
         (*env)->ReleasePrimitiveArrayCritical(env, input, inputNative, JNI_ABORT);
         return -1;
     }
+    //if (isCopy == JNI_TRUE) {
+    //    printf("A copy was made in spot 6\n");
+    //} else {
+    //    printf("No copy made in spot 6\n");
+    //}
+    //fflush( stdout );
+
 
     if (1 != (*OSSL_CipherUpdate)(ctx, (outputNative + outputOffset), &outputLen, (inputNative + inputOffset), inputLen)) {
         printErrors();
@@ -1151,7 +1209,12 @@ JNIEXPORT jint JNICALL Java_jdk_crypto_jniprovider_NativeCrypto_CBCFinalEncrypt
         (*env)->ReleasePrimitiveArrayCritical(env, output, outputNative, JNI_ABORT);
         return -1;
     }
-
+    //end_time = clock();
+    //time_taken = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    //total_time += time_taken;
+    //printf("Encryption UPDATE Ciphertext size: %d bytes, Time taken: %.4f seconds\n", inputLen, time_taken);
+    
+    //start_time = clock();
     if (1 != (*OSSL_CipherFinal_ex)(ctx, buf, &outputLen1)) {
         printErrors();
         (*env)->ReleasePrimitiveArrayCritical(env, input, inputNative, JNI_ABORT);
@@ -1161,6 +1224,11 @@ JNIEXPORT jint JNICALL Java_jdk_crypto_jniprovider_NativeCrypto_CBCFinalEncrypt
 
     (*env)->ReleasePrimitiveArrayCritical(env, input, inputNative, JNI_ABORT);
     (*env)->ReleasePrimitiveArrayCritical(env, output, outputNative, 0);
+
+    end_time = clock();
+    time_taken = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    total_time += time_taken;
+    printf("Java_jdk_crypto_jniprovider_NativeCrypto_CBCFinalEncrypt, Time taken: %.4f seconds\n", time_taken);
 
     return (jint)(outputLen + outputLen1);
 }
