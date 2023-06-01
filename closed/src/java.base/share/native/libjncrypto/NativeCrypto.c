@@ -1253,6 +1253,12 @@ JNIEXPORT jint JNICALL Java_jdk_crypto_jniprovider_NativeCrypto_GCMEncrypt
     unsigned char* outputNative = NULL;
     unsigned char* aadNative = NULL;
 
+    clock_t start_time, end_time;
+    double total_time = 0.0;
+    double time_taken = 0.0;
+
+    start_time = clock();
+
     EVP_CIPHER_CTX* ctx = NULL;
     const EVP_CIPHER* evp_gcm_cipher = NULL;
 
@@ -1430,6 +1436,11 @@ JNIEXPORT jint JNICALL Java_jdk_crypto_jniprovider_NativeCrypto_GCMEncrypt
 
     (*env)->ReleasePrimitiveArrayCritical(env, aad, aadNative, JNI_ABORT);
 
+    end_time = clock();
+    time_taken = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    total_time += time_taken;
+    printf("Java_jdk_crypto_jniprovider_NativeCrypto_GCMEncrypt, Time taken: %.4f seconds\n", time_taken);
+
     return (jint)len_cipher;
 }
 
@@ -1452,6 +1463,10 @@ JNIEXPORT jint JNICALL Java_jdk_crypto_jniprovider_NativeCrypto_GCMDecrypt
     unsigned char* outputNative = NULL;
     EVP_CIPHER_CTX* ctx = NULL;
     const EVP_CIPHER* evp_gcm_cipher = NULL;
+
+    clock_t start_time, end_time;
+    double total_time = 0.0;
+    double time_taken = 0.0;
 
     keyNative = (unsigned char*)((*env)->GetPrimitiveArrayCritical(env, key, 0));
     if (NULL == keyNative) {
@@ -1622,6 +1637,11 @@ JNIEXPORT jint JNICALL Java_jdk_crypto_jniprovider_NativeCrypto_GCMDecrypt
     if (aadLen > 0) {
         (*env)->ReleasePrimitiveArrayCritical(env, aad, aadNative, JNI_ABORT);
     }
+
+    end_time = clock();
+    time_taken = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    total_time += time_taken;
+    printf("Java_jdk_crypto_jniprovider_NativeCrypto_GCMDecrypt, Time taken: %.4f seconds\n", time_taken);
 
     if (ret > 0) {
         /* Successful Decryption */
