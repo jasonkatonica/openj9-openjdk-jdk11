@@ -1023,7 +1023,8 @@ JNIEXPORT jint JNICALL Java_jdk_crypto_jniprovider_NativeCrypto_CBCInit
     const EVP_CIPHER * evp_cipher1 = NULL;
     jboolean isCopy = JNI_FALSE;
 
-    clock_t start_time, end_time;
+    clock_t start_time = 0.0;
+    clock_t end_time = 0.0;
     double total_time = 0.0;
     double time_taken = 0.0;
 
@@ -1158,7 +1159,8 @@ JNIEXPORT jint JNICALL Java_jdk_crypto_jniprovider_NativeCrypto_CBCFinalEncrypt
   (JNIEnv *env, jclass thisObj, jlong c, jbyteArray input, jint inputOffset, jint inputLen,
   jbyteArray output, jint outputOffset) {
 
-    clock_t start_time, end_time;
+    clock_t start_time = 0.0;
+    clock_t end_time = 0.0;
     double total_time = 0.0;
     double time_taken = 0.0;
 
@@ -1253,7 +1255,8 @@ JNIEXPORT jint JNICALL Java_jdk_crypto_jniprovider_NativeCrypto_GCMEncrypt
     unsigned char* outputNative = NULL;
     unsigned char* aadNative = NULL;
 
-    clock_t start_time, end_time;
+    clock_t start_time = 0.0;
+    clock_t end_time = 0.0;
     double total_time = 0.0;
     double time_taken = 0.0;
 
@@ -1464,7 +1467,8 @@ JNIEXPORT jint JNICALL Java_jdk_crypto_jniprovider_NativeCrypto_GCMDecrypt
     EVP_CIPHER_CTX* ctx = NULL;
     const EVP_CIPHER* evp_gcm_cipher = NULL;
 
-    clock_t start_time, end_time;
+    clock_t start_time = 0.0;
+    clock_t end_time = 0.0;
     double total_time = 0.0;
     double time_taken = 0.0;
 
